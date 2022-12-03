@@ -4,21 +4,29 @@
   "proxy": "http://localhost:4000",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-syntax-class-properties": "^7.12.13",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "cors": "^2.8.5",
     "puppeteer": "^19.3.0",
+    "puppeteer-core": "^19.4.0",
+    "puppeteer-web": "0.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "webpack-manifest-plugin": "^5.0.0",
+    "webpack-server": "^0.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start:dev": "react-scripts start",
+    "start": "(cd server && npm run start) & react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "(cd server && npm run dev) & npm run start"
+    "dev": "(cd server && npm run dev) & react-scripts start"
   },
   "eslintConfig": {
     "extends": [
@@ -39,10 +47,29 @@
     ]
   },
   "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.5",
+    "@babel/node": "^7.20.5",
+    "@babel/plugin-transform-runtime": "^7.19.6",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
     "autoprefixer": "^10.4.13",
+    "babel-loader": "^9.1.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "concurrently": "^7.6.0",
+    "css-loader": "^6.7.2",
+    "file-loader": "^6.2.0",
+    "html-loader": "^4.2.0",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.7.1",
     "nodemon": "^2.0.20",
     "postcss": "^8.4.19",
-    "tailwindcss": "^3.2.4"
+    "postcss-loader": "^7.0.2",
+    "postcss-preset-env": "^7.8.3",
+    "style-loader": "^3.3.1",
+    "tailwindcss": "^3.2.4",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.0",
+    "webpack-dev-server": "^4.11.1"
   }
 }

@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState } from "react";
 import "./tailwind.css";
-import Loader from "./loading.png";
-import SearchIcon from "./search-icon.png";
+import Loader from "./assets/loading.png";
+import SearchIcon from "./assets/search-icon.png";
 
 const App = () => {
   const [data, setData] = useState();
@@ -11,7 +11,7 @@ const App = () => {
   const handleSearch = async (param) => {
     setLoading(true);
     try {
-      await fetch(`/search?q=${param}`)
+      fetch(`/api/search?q=${param}`)
         .then((res) => res.json())
         .then((data) => {
           setData(data);

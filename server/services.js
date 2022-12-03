@@ -1,6 +1,7 @@
 const Services = {};
 
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
+const { executablePath } = require("puppeteer");
 
 const transformData = (data) => {
   const prices = data.map((e) => {
@@ -8,8 +9,7 @@ const transformData = (data) => {
       ...e,
       price: Number(
         Number(e.price.substr(1, e.price.length)) +
-          Number(e.price.substr(1, e.price.length)) * 0.08 +
-          20 +
+          (Number(e.price.substr(1, e.price.length)) + 20) * 0.08 +
           Number(e.price.substr(1, e.price.length)) * 0.4
       ).toFixed(2),
     };
@@ -25,7 +25,9 @@ const transformData = (data) => {
 Services.Search = (params) =>
   new Promise(async (resolve, reject) => {
     try {
-      const browser = await puppeteer.launch({ headless: true });
+      const browser = await puppeteer.launch({
+        executablePath: executablePath(),
+      });
 
       const page = await browser.newPage();
       await page.goto("https://www.musiciansfriend.com/");
