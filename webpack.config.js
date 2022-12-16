@@ -1,6 +1,9 @@
 const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
+const webpack = require("webpack");
+
+const dotenv = require("dotenv");
 
 const isDev = process.env.ENV === "development";
 
@@ -50,6 +53,40 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.svg$/,
+        oneOf: [
+          {
+            issuer: /\.s?css$/,
+            type: "asset/resource",
+          },
+
+          {
+            use: [
+              {
+                loader: "@svgr/webpack",
+                options: {
+                  options: {
+                    prettier: false,
+                    svgo: true,
+                    svgoConfig: {
+                      plugins: [{ removeViewBox: false }],
+                    },
+                    titleProp: true,
+                  },
+                },
+              },
+              {
+                loader: "file-loader",
+              },
+            ],
+            type: "javascript/auto",
+          },
+        ],
+        issuer: {
+          and: [/\.(ts|tsx|js|jsx|md|mdx)$/],
+        },
+      },
     ],
   },
   devServer: {
@@ -59,6 +96,9 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: "./public/index.html",
       filename: "./index.html",
+    }),
+    new webpack.DefinePlugin({
+      "process.env": JSON.stringify(dotenv.config().parsed), // it will automatically pick up key values from .env file
     }),
     isDev ? () => {} : new WebpackManifestPlugin(),
   ],

@@ -7,17 +7,19 @@ const App = () => {
   const [data, setData] = useState();
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
-
+  console.log(process.env);
   const handleSearch = async (param) => {
     setLoading(true);
+
     try {
-      fetch(`/api/search?q=${param}`)
+      fetch(`${process.env.API_URL}/ssr?q=${param}`)
         .then((res) => res.json())
         .then((data) => {
           setData(data);
-        });
+          setLoading(false);
+        })
+        .finally(() => setLoading(false));
     } catch (error) {
-    } finally {
       setLoading(false);
     }
   };
@@ -33,8 +35,9 @@ const App = () => {
             onChange={(e) =>
               setTimeout(() => {
                 setSearch(e.target.value);
-              }, 1500)
+              }, 1000)
             }
+            onKeyDown={(e) => (e.key === "Enter" ? handleSearch(search) : {})}
           />
           <button
             onClick={() => handleSearch(search)}
@@ -43,12 +46,23 @@ const App = () => {
             <img src={SearchIcon} alt="icon" />
           </button>
         </div>
+        {loading && (
+          <div className="flex w-full items-center justify-center">
+            <img
+              src={Loader}
+              alt="loader"
+              className="motion-safe animate-spin"
+              width={64}
+              height={64}
+            />
+          </div>
+        )}
 
-        {!loading ? (
-          <>
-            {data && data.length && (
-              <>
-                {data.map((e, i) => (
+        {!loading && data && data.length ? (
+          <div className="flex flex-col w-full justify-center items-center">
+            {data.map((e, i) => {
+              if (!!e)
+                return (
                   <div
                     key={i}
                     className={`w-2/5 bg-white rounded-md p-6 flex mb-4`}
@@ -59,13 +73,10 @@ const App = () => {
                       <span className="font-semibold">Precio: ${e.price}</span>
                     </div>
                   </div>
-                ))}
-              </>
-            )}
-          </>
-        ) : (
-          <img src={Loader} alt="loader" className="motion-safe animate-spin" />
-        )}
+                );
+            })}
+          </div>
+        ) : null}
       </div>
     </div>
   );
