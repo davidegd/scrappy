@@ -7,21 +7,20 @@ const App = () => {
   const [data, setData] = useState();
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
-  console.log(process.env);
   const handleSearch = async (param) => {
     setLoading(true);
+    const controller = new AbortController();
+    // const url = 'https://puppesearch.herokuapp.com/'
 
-    try {
-      fetch(`${process.env.API_URL}/ssr?q=${param}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setData(data);
-          setLoading(false);
-        })
-        .finally(() => setLoading(false));
-    } catch (error) {
-      setLoading(false);
-    }
+    fetch(`https://puppesearch.herokuapp.com/ssr?q=${param}`, {
+      signal: controller.signal,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data);
+      })
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
   };
 
   return (
